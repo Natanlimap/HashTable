@@ -1,0 +1,4 @@
+/home/natan/Downloads/EDB/source_STUDENTS/source_STUDENTS/build/CMakeFiles/rebuild_cache.dir
+/home/natan/Downloads/EDB/source_STUDENTS/source_STUDENTS/build/CMakeFiles/edit_cache.dir
+/home/natan/Downloads/EDB/source_STUDENTS/source_STUDENTS/build/CMakeFiles/run_tests.dir
+/home/natan/Downloads/EDB/source_STUDENTS/source_STUDENTS/build/CMakeFiles/driver_hash.dir

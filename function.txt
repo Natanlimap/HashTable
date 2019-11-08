@@ -1,0 +1,37 @@
+bool insert(){
+	1) Calcula a posicao (utilizando o HASH e MOD)
+	2) VAI ATE A POSICAO e verifica se ja existe {RETRIEVE}
+		-true: Altera o conteudo, retorna false
+		-false: push_front(conteudo), retorna true
+	3) Incrementa m_count
+	4) metodo full.
+}
+
+void clear(){
+		1) delete[]vetor[i]
+		2)
+	}
+
+void empty(){
+	1) verifica se m_count == 0
+		-true: retorna true
+		-false: retorna false	
+}
+
+size_t size(){
+	1) retorna m_count
+}
+
+size_T count(){
+	1) calcula a posicao (utilizando o HASH e MOD)
+	2) size(foward_list) da posicao do vetor[posicao]
+}
+
+rehash(){
+	1) Procura o proximo primeiro em relacao a m_size
+	2) cria um novo vetor copia baseado no tamanho de 1)
+	3) para cada elemento do vetor original, utilizando a chabe de cada elemento, o inserimos no vetor copia
+	4) clear do vetor original
+	5) vetor original aponta para o copia
+	6) deleta-se o copia
+}
