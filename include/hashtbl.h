@@ -30,7 +30,10 @@ namespace MyHashTable {
             using size_type = std::size_t;
 
             explicit HashTbl( int TableSz_ = DEFAULT_SIZE ){
+                TableSz_ = returnPrime(TableSz_);
                 m_data_table = new std::forward_list< entry_type >[TableSz_];
+                m_size = DEFAULT_SIZE;
+                m_count = 0;
             }
             HashTbl( const HashTbl& );
             HashTbl( const std::initializer_list< entry_type > & );
@@ -44,6 +47,15 @@ namespace MyHashTable {
             bool erase( const KeyType & );
             void clear();
             bool empty() const;
+            int returnPrime(int TableSz_){
+                while(){
+                    int count = 0;
+                    for(int i=0;i<sqrt(TableSz_);i++){
+
+                        if (count )
+                    }
+                }
+            }
             inline size_type size() const { return m_count; }
             DataType& at( const KeyType& );
             DataType& operator[]( const KeyType& );
