@@ -4,7 +4,7 @@
 #include <iostream>
 #include <forward_list> // forward_list
 #include <math.h>
-
+#include <vector>
 using namespace std;
 
 namespace ac {
@@ -30,8 +30,8 @@ namespace ac {
             using list_type = std::forward_list< entry_type >;
             using size_type = std::size_t;
 
-            explicit HashTbl( int TableSz_ = DEFAULT_SIZE ){
-                TableSz_ = returnPrime(TableSz_);
+            explicit HashTbl( int TableSz_ = 11 ){
+                m_Tablesz = returnPrime(TableSz_);
                 m_data_table = new std::forward_list< entry_type >[TableSz_];
                 m_size = 0;
                 m_count = 0;
@@ -47,13 +47,38 @@ namespace ac {
             }
 
             bool insert( const KeyType & key, const DataType & data){
-                int pos;
-                pos = KeyHash()(key) % m_size; 
-                std::cout<<pos;
+                //falta verificar se ja existe
+                int pos = hashToInt(key); 
+                m_data_table[pos].push_front({key, data});
+                m_count++;
+               
             } 
-            bool retrieve( const KeyType &, DataType & ) const;
+            bool retrieve( const KeyType & key, DataType & data) const{
+                int pos = hashToInt(key);
+                auto it = m_data_table[pos].begin();
+                while(it != m_data_table[pos].end()){
+                    if(data == it->data){
+                        return true;
+                    }
+                    it++;
+                }
+                return false;
+            }
+
             bool erase( const KeyType & );
-            void clear();
+
+            void clear(){
+                for(size_t i = 0;i < m_Tablesz - 1;i++){
+                    auto it = m_data_table[i].begin();
+                    auto it2 = m_data_table[i].end();
+                    size_t distance = std::distance(it, it2);
+                         while(distance > 0){
+                            m_data_table[i].pop_front();
+                            distance--;
+                        }
+                }
+            }
+
             bool empty() const{
                 if(m_count == 0){
                     return true;
@@ -62,17 +87,54 @@ namespace ac {
                 }
             }
             inline size_type size() const { return m_count; }
+
             DataType& at( const KeyType& );
-            DataType& operator[]( const KeyType& );
+
+            // DataType& operator[]( const KeyType& key){
+            //     return m_data_table[]
+            // }
+
             size_type count( const KeyType& ) const;
-            void print();
+
+
+            void print(){
+
+            }
+
             friend std::ostream & operator<<( std::ostream & os_, const HashTbl & ht_ )
             {
-                // TODO
+                for(size_t i = 0;i < ht_.m_Tablesz - 1;i++){
+                    auto it = ht_.m_data_table[i].begin();
+                         while(it != ht_.m_data_table[i].end()){
+                            os_ << "CHAVE --> [ " << i << " ] "<<it->m_key <<" DADOs --> "<< it->m_data << std::endl;
+                            it++;
+                    }
+
+                    }
+                
                 return os_;
             }
+
+            int hashToInt(const KeyType & key){
+               return KeyHash()(key) % m_Tablesz; 
+            }
+
+
             int returnPrime(int TableSz_){
-              return 11;
+              int count;
+              while(1){
+                count = 0;
+                for(int i = 1; i <= TableSz_; i++){
+                    if(TableSz_ % i == 0){
+                        count++;
+                    }
+                }
+                if(count == 2){
+                    return TableSz_;
+                }
+                TableSz_++;
+              }
+                
             
             }
 
@@ -83,8 +145,8 @@ namespace ac {
         private:
             unsigned int m_size;  //!< Tamanho da tabela.
             unsigned int m_count; //!< Numero de elementos na tabel. 
-            std::forward_list< entry_type > *m_data_table; //!< Tabela de listas para entradas de tabela.
-            static const short DEFAULT_SIZE = 11;
+            std::forward_list< entry_type> *m_data_table; //!< Tabela de listas para entradas de tabela.
+            size_t m_Tablesz;
     };
 
 } // MyHashTable
