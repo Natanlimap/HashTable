@@ -46,7 +46,11 @@ namespace ac {
             
             }
 
-            bool insert( const KeyType &, const DataType &  );
+            bool insert( const KeyType & key, const DataType & data){
+                int pos;
+                pos = KeyHash()(key) % m_size; 
+                std::cout<<pos;
+            } 
             bool retrieve( const KeyType &, DataType & ) const;
             bool erase( const KeyType & );
             void clear();
@@ -80,7 +84,6 @@ namespace ac {
             unsigned int m_size;  //!< Tamanho da tabela.
             unsigned int m_count; //!< Numero de elementos na tabel. 
             std::forward_list< entry_type > *m_data_table; //!< Tabela de listas para entradas de tabela.
-            // std::unique_ptr< std::forward_list< entry_type > [] > m_data_table;
             static const short DEFAULT_SIZE = 11;
     };
 

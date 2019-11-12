@@ -10,9 +10,9 @@
 
 
 int main(){
-
     /// This is the hash table we use in the tests.
     ac::HashTbl< Account::AcctKey, Account, KeyHash, KeyEqual > ht_accounts{ 4 };
     assert(ht_accounts.empty());
     assert(ht_accounts.size() == 0);
+    // assert(ht_accounts.insert())
 }
