@@ -14,6 +14,7 @@ int main(){
     /// This is the hash table we use in the tests.
    std::array<Fruit, 12> m_accounts;
     ac::HashTbl< std::string, Fruit, FruitHash, FruitEqual > ht_fruit{ 12 };
+    ac::HashTbl< std::string, Fruit, FruitHash, FruitEqual > ht_copia(ht_fruit);
     assert(ht_fruit.empty());
     assert(ht_fruit.size() == 0);
      ht_fruit.insert("morango", Fruit( "morang", 10, 30 ));
@@ -22,7 +23,7 @@ int main(){
        ht_fruit.insert("amora", Fruit( "amora", 99, 666 ));
      ht_fruit.insert("uva", Fruit( "uva", 1, 6 ));
      std::cout << ht_fruit;
-     ht_fruit.clear();
+     ht_fruit.erase("amora");
      std::cout << ht_fruit;
 
 }

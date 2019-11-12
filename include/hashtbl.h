@@ -32,12 +32,20 @@ namespace ac {
 
             explicit HashTbl( int TableSz_ = 11 ){
                 m_Tablesz = returnPrime(TableSz_);
-                m_data_table = new std::forward_list< entry_type >[TableSz_];
+                m_data_table = new std::forward_list< entry_type >[m_Tablesz];
                 m_size = 0;
                 m_count = 0;
             }
 
-            HashTbl( const HashTbl& );
+            HashTbl( const HashTbl& other){
+                m_Tablesz = other.m_Tablesz;
+                m_data_table = new std::forward_list< entry_type >[m_Tablesz];
+                for(size_t i ; i < m_Tablesz;i++){
+                    insert({key, data});
+                }
+                m_size = other.size();
+                m_count = other.m_count;
+            }
             HashTbl( const std::initializer_list< entry_type > & );
             HashTbl& operator=( const HashTbl& );
             HashTbl& operator=( const std::initializer_list< entry_type > & );
@@ -53,19 +61,29 @@ namespace ac {
                 m_count++;
                
             } 
-            bool retrieve( const KeyType & key, DataType & data) const{
+            // bool retrieve( const KeyType & key, DataType & data) const{
+            //     int pos = hashToInt(key);
+            //     auto it = m_data_table[pos].begin();
+            //     while(it != m_data_table[pos].end()){
+            //         if(data == it->data){
+            //             return true;
+            //         }
+            //         it++;
+            //     }
+            //     return false;
+            // }
+
+            bool erase( const KeyType & key){
                 int pos = hashToInt(key);
                 auto it = m_data_table[pos].begin();
-                while(it != m_data_table[pos].end()){
-                    if(data == it->data){
-                        return true;
-                    }
-                    it++;
+                auto it2 = m_data_table[pos].end();
+                size_t distance = std::distance(it, it2);
+                if(distance == 0){
+                    return false;
                 }
-                return false;
+                m_data_table[pos].pop_front();
+                return true;
             }
-
-            bool erase( const KeyType & );
 
             void clear(){
                 for(size_t i = 0;i < m_Tablesz - 1;i++){
@@ -103,6 +121,7 @@ namespace ac {
 
             friend std::ostream & operator<<( std::ostream & os_, const HashTbl & ht_ )
             {
+                std::cout<<std::endl;   
                 for(size_t i = 0;i < ht_.m_Tablesz - 1;i++){
                     auto it = ht_.m_data_table[i].begin();
                          while(it != ht_.m_data_table[i].end()){
