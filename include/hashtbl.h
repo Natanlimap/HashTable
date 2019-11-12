@@ -3,12 +3,13 @@
 
 #include <iostream>
 #include <forward_list> // forward_list
+#include <math.h>
 
 using namespace std;
 
-namespace MyHashTable {
+namespace ac {
 
-    template<class KeyType, class DataType>
+    template<class KeyType, class DataType,typename KeyHash = std :: hash < KeyType >,typename KeyEqual = std :: equal_to < KeyType > >
     class HashEntry
     {
         public:
@@ -20,7 +21,7 @@ namespace MyHashTable {
             {/*Empty*/}
     };
 
-    template< class KeyType, class DataType >
+    template<class KeyType, class DataType,typename KeyHash = std :: hash < KeyType >,typename KeyEqual = std :: equal_to < KeyType > >
     class HashTbl
     {
         public:
@@ -32,28 +33,28 @@ namespace MyHashTable {
             explicit HashTbl( int TableSz_ = DEFAULT_SIZE ){
                 TableSz_ = returnPrime(TableSz_);
                 m_data_table = new std::forward_list< entry_type >[TableSz_];
-                m_size = DEFAULT_SIZE;
+                m_size = 0;
                 m_count = 0;
             }
+
             HashTbl( const HashTbl& );
             HashTbl( const std::initializer_list< entry_type > & );
             HashTbl& operator=( const HashTbl& );
             HashTbl& operator=( const std::initializer_list< entry_type > & );
 
-            virtual ~HashTbl();
+            virtual ~HashTbl(){
+            
+            }
 
             bool insert( const KeyType &, const DataType &  );
             bool retrieve( const KeyType &, DataType & ) const;
             bool erase( const KeyType & );
             void clear();
-            bool empty() const;
-            int returnPrime(int TableSz_){
-                while(){
-                    int count = 0;
-                    for(int i=0;i<sqrt(TableSz_);i++){
-
-                        if (count )
-                    }
+            bool empty() const{
+                if(m_count == 0){
+                    return true;
+                }else{
+                    return false;
                 }
             }
             inline size_type size() const { return m_count; }
@@ -65,6 +66,10 @@ namespace MyHashTable {
             {
                 // TODO
                 return os_;
+            }
+            int returnPrime(int TableSz_){
+              return 11;
+            
             }
 
             //=== Private methods
