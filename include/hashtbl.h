@@ -33,18 +33,25 @@ namespace ac {
             explicit HashTbl( int TableSz_ = 11 ){
                 m_Tablesz = returnPrime(TableSz_);
                 m_data_table = new std::forward_list< entry_type >[m_Tablesz];
-                m_size = 0;
                 m_count = 0;
             }
 
-            // HashTbl( const HashTbl& other){
-            //     m_Tablesz = other.m_Tablesz;
-            //     m_data_table = new std::forward_list< entry_type >[m_Tablesz];
-            //     for 
-            //     m_size = other.m_size;
-            //     m_count = other.m_count;
-            // }
+            HashTbl( const HashTbl& other){
+                m_Tablesz = other.m_Tablesz;
+                m_data_table = new std::forward_list< entry_type >[m_Tablesz];
+                for(size_t i = 0;i < other.m_Tablesz - 1;i++){
+                    auto it = other.m_data_table[i].begin();
+                    auto m_it = m_data_table[i].begin();
+                         while(it != other.m_data_table[i].end()){
+                            m_data_table[i].push_front({it->m_key, it->m_data});
+                            it++;
+                    }
+                }
+
+                m_count = other.m_count;
+            }  
             // HashTbl( const std::initializer_list< entry_type > & );
+
             HashTbl& operator=( const HashTbl& );
             HashTbl& operator=( const std::initializer_list< entry_type > & );
 
@@ -53,10 +60,13 @@ namespace ac {
             }
 
             bool insert( const KeyType & key, const DataType & data){
+                m_count++;
+                if(m_count >= m_Tablesz){
+                    rehash();
+                }
                 //falta verificar se ja existe
                 int pos = hashToInt(key); 
                 m_data_table[pos].push_front({key, data});
-                m_count++;
                
             } 
             bool retrieve( const KeyType & key, DataType & data){
@@ -104,31 +114,45 @@ namespace ac {
                     return false;
                 }
             }
+
             size_t distance_key(KeyType key){
                 int pos = hashToInt(key);
                 auto it = m_data_table[pos].begin();
                 auto it2 = m_data_table[pos].end();
                 return std::distance(it, it2);
             }
+
             inline size_type size() const { return m_count; }
+            inline size_type tbl_size() const { return m_Tablesz; }
 
             DataType& at( const KeyType& key){
-               
+                KeyEqual test;
                 int pos = hashToInt(key);
-                return &m_data_table[pos];
+                auto it = m_data_table[pos].begin();
+                if (test(key, it->m_key) == true){
+                    return it->m_data;
+                }else{
+                     throw std::out_of_range("chave invalida");      //NAO SEI SE FIZ CERTo
+                }
 
             }
 
             DataType& operator[](const KeyType& key){
-                int pos = hashToInt(key);
-                auto it = m_data_table[pos].begin();
+                
                
             }
 
-            size_type count( const KeyType& key) const;
+            size_type count( const KeyType& key)const{
+                size_t count = 0;
+                int i = hashToInt(key);
+                auto it = m_data_table[i].begin();
+                    while(it != m_data_table[i].end()){
+                        count++;
+                        it++;
+                    }
+                return count;
+                }
 
-
-            
 
             friend std::ostream & operator<<( std::ostream & os_, const HashTbl & ht_ )
             {
@@ -145,7 +169,8 @@ namespace ac {
                 return os_;
             }
 
-            int hashToInt(const KeyType & key){
+
+            int hashToInt(const KeyType & key) const{
                return KeyHash()(key) % m_Tablesz; 
             }
 
@@ -170,17 +195,30 @@ namespace ac {
 
             //=== Private methods
         private:
-            void rehash();        //!< Change Hash table size if load factor >1.0
+            void rehash(){
+                int new_m_Tablesz = returnPrime(2*m_Tablesz);
+                HashTbl< KeyType, DataType, KeyHash, KeyEqual > aux{new_m_Tablesz};
+                 for(size_t i = 0;i < m_Tablesz - 1;i++){
+                    auto it = m_data_table[i].begin();
+                         while(it != m_data_table[i].end()){
+                            aux.insert(it->m_key, it->m_data);
+                            it++;
+                    }
+                }
+                m_data_table = aux.m_data_table;
+                m_Tablesz = new_m_Tablesz;
+            }
+    
+               
+
             //=== Private memnbers
         private:
-            unsigned int m_size;  //!< Tamanho da tabela.
+            size_t m_Tablesz; //Tamanho da tabela
             unsigned int m_count; //!< Numero de elementos na tabel. 
             std::forward_list< entry_type> *m_data_table; //!< Tabela de listas para entradas de tabela.
-            size_t m_Tablesz;
     };
 
 } // MyHashTable
-#include "hashtbl.inl"
 #endif
 
 
