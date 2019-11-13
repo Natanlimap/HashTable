@@ -37,16 +37,14 @@ namespace ac {
                 m_count = 0;
             }
 
-            HashTbl( const HashTbl& other){
-                m_Tablesz = other.m_Tablesz;
-                m_data_table = new std::forward_list< entry_type >[m_Tablesz];
-                for(size_t i ; i < m_Tablesz;i++){
-                    insert({key, data});
-                }
-                m_size = other.size();
-                m_count = other.m_count;
-            }
-            HashTbl( const std::initializer_list< entry_type > & );
+            // HashTbl( const HashTbl& other){
+            //     m_Tablesz = other.m_Tablesz;
+            //     m_data_table = new std::forward_list< entry_type >[m_Tablesz];
+            //     for 
+            //     m_size = other.m_size;
+            //     m_count = other.m_count;
+            // }
+            // HashTbl( const std::initializer_list< entry_type > & );
             HashTbl& operator=( const HashTbl& );
             HashTbl& operator=( const std::initializer_list< entry_type > & );
 
@@ -61,17 +59,19 @@ namespace ac {
                 m_count++;
                
             } 
-            // bool retrieve( const KeyType & key, DataType & data) const{
-            //     int pos = hashToInt(key);
-            //     auto it = m_data_table[pos].begin();
-            //     while(it != m_data_table[pos].end()){
-            //         if(data == it->data){
-            //             return true;
-            //         }
-            //         it++;
-            //     }
-            //     return false;
-            // }
+            bool retrieve( const KeyType & key, DataType & data){
+                int pos = hashToInt(key);
+                auto it = m_data_table[pos].begin();
+                KeyEqual test;
+                if (test(key, it->m_key) == true){
+                    data = it->m_data;
+                    return true;
+
+                }else{
+                    return false;
+                }                
+                
+            }
 
             bool erase( const KeyType & key){
                 int pos = hashToInt(key);
@@ -104,20 +104,31 @@ namespace ac {
                     return false;
                 }
             }
+            size_t distance_key(KeyType key){
+                int pos = hashToInt(key);
+                auto it = m_data_table[pos].begin();
+                auto it2 = m_data_table[pos].end();
+                return std::distance(it, it2);
+            }
             inline size_type size() const { return m_count; }
 
-            DataType& at( const KeyType& );
-
-            // DataType& operator[]( const KeyType& key){
-            //     return m_data_table[]
-            // }
-
-            size_type count( const KeyType& ) const;
-
-
-            void print(){
+            DataType& at( const KeyType& key){
+               
+                int pos = hashToInt(key);
+                return &m_data_table[pos];
 
             }
+
+            DataType& operator[](const KeyType& key){
+                int pos = hashToInt(key);
+                auto it = m_data_table[pos].begin();
+               
+            }
+
+            size_type count( const KeyType& key) const;
+
+
+            
 
             friend std::ostream & operator<<( std::ostream & os_, const HashTbl & ht_ )
             {

@@ -61,7 +61,7 @@ struct FruitEqual {
 
 
 
-/// Cliente.
+// / Cliente.
 // int main(void) {
 
 // 	// Tabela hash de frutas. Templates: < Chave, Dado, a hash function, como comparar chaves >
