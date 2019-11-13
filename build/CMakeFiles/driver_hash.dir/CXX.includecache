@@ -23,12 +23,6 @@ math.h
 -
 vector
 -
-hashtbl.inl
-/home/natan/HashTable/include/hashtbl.inl
-
-/home/natan/HashTable/include/hashtbl.inl
-hashtbl.h
-/home/natan/HashTable/include/hashtbl.h
 
 /home/natan/HashTable/src/account.cpp
 ../include/account.h

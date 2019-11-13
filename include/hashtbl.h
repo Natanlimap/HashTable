@@ -160,7 +160,7 @@ namespace ac {
                 for(size_t i = 0;i < ht_.m_Tablesz - 1;i++){
                     auto it = ht_.m_data_table[i].begin();
                          while(it != ht_.m_data_table[i].end()){
-                            os_ << "CHAVE --> [ " << i << " ] "<<it->m_key <<" DADOs --> "<< it->m_data << std::endl;
+                            os_ << it->m_data << std::endl;
                             it++;
                     }
 
