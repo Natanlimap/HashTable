@@ -64,7 +64,9 @@ namespace ac {
                 if(m_count >= m_Tablesz){
                     rehash();
                 }
-                //falta verificar se ja existe
+                //falta verificar se ja existe CHAVES DIFERENTE SMESMO MOD 
+                //g++ -std=c++11 driver_ht.cpp -I ../include/account account.cpp
+
                 int pos = hashToInt(key); 
                 m_data_table[pos].push_front({key, data});
                
@@ -136,6 +138,7 @@ namespace ac {
                 }
 
             }
+            void print();
 
             DataType& operator[](const KeyType& key){
                 

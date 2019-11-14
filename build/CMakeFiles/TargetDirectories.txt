@@ -1,4 +1,0 @@
-/home/natan/HashTable/build/CMakeFiles/rebuild_cache.dir
-/home/natan/HashTable/build/CMakeFiles/edit_cache.dir
-/home/natan/HashTable/build/CMakeFiles/run_tests.dir
-/home/natan/HashTable/build/CMakeFiles/driver_hash.dir
