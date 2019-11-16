@@ -68,13 +68,13 @@ TEST_F(HTTest, InsertingData)
     // Inserindo as contas na tabela hash.
     for( auto & e : m_accounts )
     {
-        // ht_accounts.insert( e.getKey(), e );
-        // ASSERT_EQ( ++i, ht_accounts.size() );
-        // std::cout << ">>> Inserindo \"" << e.m_name << "\"\n";
-        // std::cout << ">>> Tabela Hash de Contas depois da insercao: \n" << ht_accounts << std::endl;
-        // Unit test for insertion
-        // ht_accounts.retrieve( e.getKey(), temp );
-        // ASSERT_EQ( temp, e );
+        ht_accounts.insert( e.getKey(), e );
+        ASSERT_EQ( ++i, ht_accounts.size() );
+        std::cout << ">>> Inserindo \"" << e.m_name << "\"\n";
+        std::cout << ">>> Tabela Hash de Contas depois da insercao: \n" << ht_accounts << std::endl;
+        // Unit test   for insertion
+        ht_accounts.retrieve( e.getKey(), temp );
+        ASSERT_EQ( temp, e );
     }
 }
 
@@ -227,57 +227,58 @@ TEST_F(HTTest, InsertingData)
 //     }
 // }
 
-// TEST_F(HTTest, CopyConstructor)
-// {
-//     std::map<std::string, size_t> expected;
-//     for (const auto &w : { "this", "sentence", "is", "not", "a", "sentence",
-//                            "this", "sentence", "is", "a", "hoax"})
-//     {
-//         ++expected[w];
-//     }
-//     // Make this hash have the same elements as the map.
-//     ac::HashTbl<std::string, size_t>  word_map;
-//     for( const auto &e : expected )
-//         word_map.insert( e.first, e.second );
+TEST_F(HTTest, CopyConstructor)
+{
+    std::map<std::string, size_t> expected;
+    for (const auto &w : { "this", "sentence", "is", "not", "a", "sentence",
+                           "this", "sentence", "is", "a", "hoax"})
+    {
+        ++expected[w];
+    }
+    // Make this hash have the same elements as the map.
+    ac::HashTbl<std::string, size_t>  word_map;
+    for( const auto &e : expected )
+        word_map.insert( e.first, e.second );
 
-//     // Create a copy
-//     ac::HashTbl<std::string, size_t>  copy( word_map );
+    // Create a copy
+    ac::HashTbl<std::string, size_t>  copy( word_map );
 
-//     // Make sure they have the same elements with the same information.
-//     for( const auto &e : expected )
-//     {
-//         size_t data;
-//         auto result = copy.retrieve( e.first, data );
-//         ASSERT_TRUE( result );
-//         ASSERT_EQ( e.second, data );
-//     }
+    // Make sure they have the same elements with the same information.
+    for( const auto &e : expected )
+    {
+        size_t data;
+        auto result = copy.retrieve( e.first, data );
+        ASSERT_TRUE( result );
+        ASSERT_EQ( e.second, data );
+    }
 
-//     ASSERT_EQ( copy.size(), word_map.size() );
-//     ASSERT_EQ( expected.size(), copy.size() );
-// }
+    ASSERT_EQ( copy.size(), word_map.size() );
+    ASSERT_EQ( expected.size(), copy.size() );
+}
 
-// TEST_F(HTTest, ConstructorInitializer)
-// {
-//     ac::HashTbl<char, int> htables {{'a', 27}, {'b', 3}, {'c', 1}};
-//     std::map<char, int> expected {{'a', 27}, {'b', 3}, {'c', 1}};
+TEST_F(HTTest, ConstructorInitializer)
+{
+    ac::HashTbl<std::string, int> htables {{"abobo", 27}, {"bababa", 3}, {"cacaca", 1}};
+    std::map<std::string, int> expected {{"abobo", 27}, {"bababa", 3}, {"cacaca", 1}};
 
-//     // Make sure they have the same elements with the same information.
-//     for( const auto &e : expected )
-//     {
-//         int data;
-//         auto result = htables.retrieve( e.first, data );
-//         ASSERT_TRUE( result );
-//         ASSERT_EQ( e.second, data );
-//     }
+    // Make sure they have the same elements with the same information.
+    std::cout<<"htables --> "<<htables<<std::endl;
+    for( const auto &e : expected )
+    {
+        int data;
+        auto result = htables.retrieve( e.first, data );
+        ASSERT_TRUE( result );
+        ASSERT_EQ( e.second, data );
+    }
 
-//     ASSERT_EQ( htables.size(), expected.size() );
-// }
+    ASSERT_EQ( htables.size(), expected.size() );
+}
 
 // TEST_F(HTTest, AssignmentOperator)
 // {
-//     ac::HashTbl<char, int> htable {{'a', 27}, {'b', 3}, {'c', 1}};
-//     ac::HashTbl<char, int> htable_copy;
-//     std::map<char, int> expected {{'a', 27}, {'b', 3}, {'c', 1}};
+//     ac::HashTbl<std::string, int> htable {{"abobo", 27}, {"bababa", 3}, {"cacaca", 1}};
+//     ac::HashTbl<std::string, int> htable_copy;
+//     std::map<std::string, int> expected {{"abobo", 27}, {"bababa", 3}, {"cacaca", 1}};
 
 //     // Make sure they are different
 //     for( const auto &e : expected )
@@ -305,8 +306,9 @@ TEST_F(HTTest, InsertingData)
 
 // TEST_F(HTTest, AssignmentInitializer)
 // {
-//     ac::HashTbl<char, int> htable {{'x', 27}, {'y', 3}, {'w', 1}};
-//     std::map<char, int> expected {{'a', 27}, {'b', 3}, {'c', 1}};
+//      ac::HashTbl<std::string, int> htable {{"abobo", 27}, {"bababa", 3}, {"cacaca", 1}};
+//      std::map<std::string, int> expected {{"abobo", 27}, {"bababa", 3}, {"cacaca", 1}};
+
 
 //     // Make sure they are different
 //     for( const auto &e : expected )
@@ -330,8 +332,8 @@ TEST_F(HTTest, InsertingData)
 
 // TEST_F(HTTest, Insert)
 // {
-//     ac::HashTbl<char, int> htable( 3 );
-//     std::map<char, int> expected {{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
+//     ac::HashTbl<std::string, int> htable( 3 );
+//     std::map<std::string, int> expected {{"xaaa", 27}, {"yaaa", 3}, {"waa", 1}, {"aaaa", 21}, {"baaa", 6}, {"caaa", 11}};
 
 //     ASSERT_TRUE( htable.empty() );
 
@@ -347,15 +349,15 @@ TEST_F(HTTest, InsertingData)
 //     {
 //         int data;
 //         auto result = htable.retrieve( e.first, data );
-//         ASSERT_TRUE( result );
+//         // ASSERT_TRUE( result );
 //         ASSERT_EQ( e.second, data );
 //     }
 // }
 
 // TEST_F(HTTest, InsertExisting)
 // {
-//     ac::HashTbl<char, int> htable {{'x', 2}, {'y', 1}, {'w', 4}, {'a', 5}, {'b', 8}, {'c', 7}};
-//     std::map<char, int> expected {{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
+//     ac::HashTbl<std::string, int> htable {{"xaa", 2}, {"yaa", 1}, {"waa", 4}, {"aaa", 5}, {"baa", 8}, {"caa", 7}};
+//     std::map<std::string, int> expected {{"xaa", 27}, {"yaa", 3}, {"waa", 1}, {"aaa", 21}, {"baa", 6}, {"caa", 11}};
 
 //     // Make sure the two hash tables store different values.
 //     for( const auto &e : expected )
@@ -388,7 +390,7 @@ TEST_F(HTTest, InsertingData)
 
 // TEST_F(HTTest, Retrieve)
 // {
-//     ac::HashTbl<char, int> htable{{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
+//     ac::HashTbl<char, int> htable{{"x", 27}, {"y", 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
 //     std::map<char, int> expected {{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
 //     std::map<char, int> unexpected {{'s', 27}, {'e', 3}, {'g', 1}, {'q', 21}, {'i', 6}, {'j', 11}};
 

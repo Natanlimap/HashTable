@@ -41,7 +41,6 @@ namespace ac {
                 m_data_table = new std::forward_list< entry_type >[m_Tablesz];
                 for(size_t i = 0;i < other.m_Tablesz - 1;i++){
                     auto it = other.m_data_table[i].begin();
-                    auto m_it = m_data_table[i].begin();
                          while(it != other.m_data_table[i].end()){
                             m_data_table[i].push_front({it->m_key, it->m_data});
                             it++;
@@ -50,10 +49,24 @@ namespace ac {
 
                 m_count = other.m_count;
             }  
-            // HashTbl( const std::initializer_list< entry_type > & );
+            HashTbl( const std::initializer_list< entry_type > & inl){
+                auto first = inl.begin();
+                auto last = inl.end();
+                size_t distance = std::distance(first, last);
+                m_Tablesz = returnPrime(distance);
+                m_data_table = new std::forward_list< entry_type >[m_Tablesz];
+                m_count = 0;
+
+                while(first != last){
+                    insert(first->m_key, first->m_data);
+                    first++;
+                }
+            }
 
             HashTbl& operator=( const HashTbl& );
-            HashTbl& operator=( const std::initializer_list< entry_type > & );
+            HashTbl& operator=( const std::initializer_list< entry_type > & inl){
+
+            }
 
             virtual ~HashTbl(){
             
@@ -64,37 +77,51 @@ namespace ac {
                 if(m_count >= m_Tablesz){
                     rehash();
                 }
-                //falta verificar se ja existe CHAVES DIFERENTE SMESMO MOD 
+                KeyEqual test;
+                int pos = hashToInt(key); 
+                 auto it = m_data_table[pos].begin();
+                    while(it != m_data_table[pos].end()){
+                        if(test(key, it->m_key) == true){
+                            it->m_data = data;
+                            return false;
+                        }
+                        it++;
+                    } 
                 //g++ -std=c++11 driver_ht.cpp -I ../include/account account.cpp
 
-                int pos = hashToInt(key); 
                 m_data_table[pos].push_front({key, data});
+                return true;
                
             } 
             bool retrieve( const KeyType & key, DataType & data){
                 int pos = hashToInt(key);
                 auto it = m_data_table[pos].begin();
                 KeyEqual test;
-                if (test(key, it->m_key) == true){
-                    data = it->m_data;
-                    return true;
-
-                }else{
-                    return false;
-                }                
-                
+                while(it != m_data_table[pos].end()){
+                     if (test(key, it->m_key) == true){
+                        data = it->m_data; 
+                        return true;
+                     }
+                     it++;
+                }
+                    return false;                
             }
 
             bool erase( const KeyType & key){
                 int pos = hashToInt(key);
+                KeyEqual test;
                 auto it = m_data_table[pos].begin();
-                auto it2 = m_data_table[pos].end();
-                size_t distance = std::distance(it, it2);
-                if(distance == 0){
-                    return false;
+                auto it2 = m_data_table[pos].begin();
+                while(it != m_data_table[pos].end()){
+                    if(test(it->m_key, key) == true){
+                        it->m_key = KeyType();
+                        it->m_data= DataType();
+                        m_count--;
+                        return true;
+                    }
+                    it++;
                 }
-                m_data_table[pos].pop_front();
-                return true;
+                return false;
             }
 
             void clear(){
@@ -107,6 +134,7 @@ namespace ac {
                             distance--;
                         }
                 }
+                m_count = 0;
             }
 
             bool empty() const{
