@@ -304,31 +304,31 @@ TEST_F(HTTest, AssignmentOperator)
     ASSERT_EQ( htable_copy.size(), expected.size() );
 }
 
-// TEST_F(HTTest, AssignmentInitializer)
-// {
-//      ac::HashTbl<std::string, int> htable {{"abobo", 27}, {"bababa", 3}, {"cacaca", 1}};
-//      std::map<std::string, int> expected {{"abobo", 27}, {"bababa", 3}, {"cacaca", 1}};
+TEST_F(HTTest, AssignmentInitializer)
+{
+     ac::HashTbl<char, int> htable {{'a', 27}, {'b', 3}, {'c', 1}};
+     std::map<char, int> expected {{'a', 27}, {'b', 3}, {'c', 1}};
 
 
-//     // Make sure they are different
-//     for( const auto &e : expected )
-//     {
-//         int data;
-//         auto result = htable.retrieve( e.first, data );
-//         ASSERT_FALSE( result );
-//     }
-//     // Testing initializer assignment
-//     htable = {{'a', 27}, {'b', 3}, {'c', 1}};
+    // Make sure they are different
+    for( const auto &e : expected )
+    {
+        int data;
+        auto result = htable.retrieve( e.first, data );
+        ASSERT_FALSE( result );
+    }
+    // Testing initializer assignment
+    htable = {{'a', 27}, {'b', 3}, {'c', 1}};
 
-//     // Make sure they have the same elements with the same information.
-//     for( const auto &e : expected )
-//     {
-//         int data;
-//         auto result = htable.retrieve( e.first, data );
-//         ASSERT_TRUE( result );
-//         ASSERT_EQ( e.second, data );
-//     }
-// }
+    // Make sure they have the same elements with the same information.
+    for( const auto &e : expected )
+    {
+        int data;
+        auto result = htable.retrieve( e.first, data );
+        ASSERT_TRUE( result );
+        ASSERT_EQ( e.second, data );
+    }
+}
 
 // TEST_F(HTTest, Insert)
 // {

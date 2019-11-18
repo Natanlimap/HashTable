@@ -63,13 +63,26 @@ namespace ac {
                 }
             }
 
-            HashTbl& operator=( const HashTbl& );
+            HashTbl& operator=( const HashTbl& other){
+                clear();
+                delete[]m_data_table;
+                m_Tablesz = other.m_Tablesz;
+                m_data_table = new std::forward_list< entry_type>[other.m_Tablesz];
+                for(size_t i = 0; i < m_Tablesz;i++){
+                    auto it = other.m_data_table[i].begin();
+                    while(it != other.m_data_table[i].end()){
+                            insert(it->m_key, it->m_data);
+                        it++;
+                    } 
+                }
+                return *this;
+            }
             HashTbl& operator=( const std::initializer_list< entry_type > & inl){
-
+                //DUVIDA
             }
 
             virtual ~HashTbl(){
-            
+                
             }
 
             bool insert( const KeyType & key, const DataType & data){
