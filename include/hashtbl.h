@@ -87,9 +87,8 @@ namespace ac {
                         }
                         it++;
                     } 
-                //g++ -std=c++11 driver_ht.cpp -I ../include/account account.cpp
 
-                m_data_table[pos].push_front({key, data});
+                m_data_table[pos].push_front(entry_type(key, data));
                 return true;
                
             } 
@@ -111,7 +110,6 @@ namespace ac {
                 int pos = hashToInt(key);
                 KeyEqual test;
                 auto it = m_data_table[pos].begin();
-                auto it2 = m_data_table[pos].begin();
                 while(it != m_data_table[pos].end()){
                     if(test(it->m_key, key) == true){
                         it->m_key = KeyType();
@@ -159,18 +157,29 @@ namespace ac {
                 KeyEqual test;
                 int pos = hashToInt(key);
                 auto it = m_data_table[pos].begin();
-                if (test(key, it->m_key) == true){
-                    return it->m_data;
-                }else{
-                     throw std::out_of_range("chave invalida");      //NAO SEI SE FIZ CERTo
+                while(it != m_data_table[pos].end()){
+                        if(test(key, it->m_key) == true){
+                            return it->m_data;
+                        }
+                        it++;
                 }
+                throw std::out_of_range("chave invalida");      //NAO SEI SE FIZ CERTo
 
             }
             void print();
 
             DataType& operator[](const KeyType& key){
-                
-               
+                KeyEqual test;
+                int pos = hashToInt(key);
+                auto it = m_data_table[pos].begin();
+                while(it != m_data_table[pos].end()){
+                        if(test(key, it->m_key) == true){
+                            return it->m_data;
+                        }
+                        it++;
+                }
+                insert(key, DataType());
+                return m_data_table[pos].begin()->m_data;
             }
 
             size_type count( const KeyType& key)const{
@@ -188,14 +197,15 @@ namespace ac {
             friend std::ostream & operator<<( std::ostream & os_, const HashTbl & ht_ )
             {
                 std::cout<<std::endl;   
-                for(size_t i = 0;i < ht_.m_Tablesz - 1;i++){
+                for(size_t i = 0;i < ht_.m_Tablesz ;i++){
                     auto it = ht_.m_data_table[i].begin();
                          while(it != ht_.m_data_table[i].end()){
-                            os_ << it->m_data << std::endl;
+                            os_ << it->m_data << " ";
                             it++;
                     }
 
                     }
+                    std::cout<<std::endl;
                 
                 return os_;
             }
