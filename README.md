@@ -34,6 +34,9 @@ This tests will show if the implementation of each method of HashTable class is 
 
 * **Natan Pereira** - (https://github.com/Natanlimap)
 
+## Project
+https://github.com/Natanlimap/HashTable
+
 ## Acknowledgments
 
 It is also important to remind that some parts of this code were inspired by classroom implementations with the presence and participation of the Basic Data Structure 1 discipline's teacher and classmates in 2019.2, taught by Selan Rodrigues dos Santos, from Universidade Federal do Rio Grande do Norte.
