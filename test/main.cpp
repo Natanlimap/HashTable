@@ -72,7 +72,7 @@ TEST_F(HTTest, InsertingData)
         ASSERT_EQ( ++i, ht_accounts.size() );
         std::cout << ">>> Inserindo \"" << e.m_name << "\"\n";
         std::cout << ">>> Tabela Hash de Contas depois da insercao: \n" << ht_accounts << std::endl;
-        // Unit test   for insertion
+        // Unit test for insertion
         ht_accounts.retrieve( e.getKey(), temp );
         ASSERT_EQ( temp, e );
     }
@@ -262,7 +262,6 @@ TEST_F(HTTest, ConstructorInitializer)
     std::map<char, int> expected {{'a', 27}, {'b', 3}, {'c', 1}};
 
     // Make sure they have the same elements with the same information.
-    std::cout<<"htables --> "<<htables<<std::endl;
     for( const auto &e : expected )
     {
         int data;
@@ -276,9 +275,9 @@ TEST_F(HTTest, ConstructorInitializer)
 
 TEST_F(HTTest, AssignmentOperator)
 {
-    ac::HashTbl<std::string, int> htable {{"abobo", 27}, {"bababa", 3}, {"cacaca", 1}};
-    ac::HashTbl<std::string, int> htable_copy;
-    std::map<std::string, int> expected {{"abobo", 27}, {"bababa", 3}, {"cacaca", 1}};
+    ac::HashTbl<char, int> htable {{'a', 27}, {'b', 3}, {'c', 1}};
+    ac::HashTbl<char, int> htable_copy;
+    std::map<char, int> expected {{'a', 27}, {'b', 3}, {'c', 1}};
 
     // Make sure they are different
     for( const auto &e : expected )
@@ -306,16 +305,14 @@ TEST_F(HTTest, AssignmentOperator)
 
 TEST_F(HTTest, AssignmentInitializer)
 {
-     ac::HashTbl<char, int> htable {{'a', 27}, {'b', 3}, {'c', 1}};
-     std::map<char, int> expected {{'a', 27}, {'b', 3}, {'c', 1}};
-
+    ac::HashTbl<char, int> htable {{'x', 27}, {'y', 3}, {'w', 1}};
+    std::map<char, int> expected {{'a', 27}, {'b', 3}, {'c', 1}};
 
     // Make sure they are different
     for( const auto &e : expected )
     {
         int data;
         auto result = htable.retrieve( e.first, data );
-        std::cout << " e.first =" << e.first << " data =" << data << " resultado =" << result;
         ASSERT_FALSE( result );
     }
     // Testing initializer assignment
@@ -333,8 +330,8 @@ TEST_F(HTTest, AssignmentInitializer)
 
 TEST_F(HTTest, Insert)
 {
-    ac::HashTbl<std::string, int> htable( 3 );
-    std::map<std::string, int> expected {{"xaaa", 27}, {"yaaa", 3}, {"waa", 1}, {"aaaa", 21}, {"baaa", 6}, {"caaa", 11}};
+    ac::HashTbl<char, int> htable( 3 );
+    std::map<char, int> expected {{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
 
     ASSERT_TRUE( htable.empty() );
 
@@ -357,8 +354,8 @@ TEST_F(HTTest, Insert)
 
 TEST_F(HTTest, InsertExisting)
 {
-    ac::HashTbl<std::string, int> htable {{"xaa", 2}, {"yaa", 1}, {"waa", 4}, {"aaa", 5}, {"baa", 8}, {"caa", 7}};
-    std::map<std::string, int> expected {{"xaa", 27}, {"yaa", 3}, {"waa", 1}, {"aaa", 21}, {"baa", 6}, {"caa", 11}};
+    ac::HashTbl<char, int> htable {{'x', 2}, {'y', 1}, {'w', 4}, {'a', 5}, {'b', 8}, {'c', 7}};
+    std::map<char, int> expected {{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
 
     // Make sure the two hash tables store different values.
     for( const auto &e : expected )
@@ -391,7 +388,7 @@ TEST_F(HTTest, InsertExisting)
 
 TEST_F(HTTest, Retrieve)
 {
-    ac::HashTbl<char, int> htable {{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
+    ac::HashTbl<char, int> htable{{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
     std::map<char, int> expected {{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
     std::map<char, int> unexpected {{'s', 27}, {'e', 3}, {'g', 1}, {'q', 21}, {'i', 6}, {'j', 11}};
 
@@ -547,6 +544,7 @@ TEST_F(HTTest, Count)
         ASSERT_EQ( set2.size(), htable.count(e.first) );
     for ( const auto &e: set3 )
         ASSERT_EQ( set3.size(), htable.count(e.first) );
+    //std::cout << "The table: \n" << htable << std::endl;
 }
 
 int main(int argc, char** argv)
