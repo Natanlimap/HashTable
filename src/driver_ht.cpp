@@ -131,11 +131,48 @@ int main()
     {
         int data;
         auto result = htable.retrieve( e.first, data );
-        std::cout<< "new"<< std::endl <<htable;
         assert( result );
-        std::cout<< " e.second --> " << e.second << " == " << data << "<--data " << std::endl;
         assert( e.second == data );
     }
+}
+
+{
+    ac::HashTbl<char, int> htable (2);
+    std::map<char, int> set1 {{'x', 2}, {'y', 1}, {'w', 4}, {'a', 5}, {'b', 8}, {'c', 7}};
+    std::map<char, int> set2 {{'s', 27}, {'e', 3}, {'g', 1}, {'q', 21}, {'i', 6}, {'j', 11}};
+
+    // Insert elements from the first set.
+    // This should trigger the rehash()
+    for( const auto &e : set1 )
+    {
+        auto result = htable.insert( e.first, e.second );
+        assert( result ); // We must NOT found the key
+    }
+    std::cout << "SET 1 -->" << set1.size() << " ==" << htable.size() << "<-- Htable";
+    // assert( set1.size() == htable.size() ); // This must've not changed.
+
+    // // Insert more elements to trigger another rehash
+    // for( const auto &e : set2 )
+    // {
+    //     auto result = htable.insert( e.first, e.second );
+    //     ASSERT_TRUE( result );
+    // }
+    
+    // // Check whether the hash now have the same elemens as set1 and set2 combined.
+    // for( const auto &e : set1 )
+    // {
+    //     int data;
+    //     auto result = htable.retrieve( e.first, data );
+    //     ASSERT_TRUE( result );
+    //     ASSERT_EQ( e.second, data );
+    // }
+    // for( const auto &e : set2 )
+    // {
+    //     int data;
+    //     auto result = htable.retrieve( e.first, data );
+    //     ASSERT_TRUE( result );
+    //     ASSERT_EQ( e.second, data );
+    // }
 }
 
     return EXIT_SUCCESS;

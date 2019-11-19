@@ -258,8 +258,8 @@ TEST_F(HTTest, CopyConstructor)
 
 TEST_F(HTTest, ConstructorInitializer)
 {
-    ac::HashTbl<std::string, int> htables {{"abobo", 27}, {"bababa", 3}, {"cacaca", 1}};
-    std::map<std::string, int> expected {{"abobo", 27}, {"bababa", 3}, {"cacaca", 1}};
+    ac::HashTbl<char, int> htables {{'a', 27}, {'b', 3}, {'c', 1}};
+    std::map<char, int> expected {{'a', 27}, {'b', 3}, {'c', 1}};
 
     // Make sure they have the same elements with the same information.
     std::cout<<"htables --> "<<htables<<std::endl;
@@ -315,6 +315,7 @@ TEST_F(HTTest, AssignmentInitializer)
     {
         int data;
         auto result = htable.retrieve( e.first, data );
+        std::cout << " e.first =" << e.first << " data =" << data << " resultado =" << result;
         ASSERT_FALSE( result );
     }
     // Testing initializer assignment
@@ -349,7 +350,6 @@ TEST_F(HTTest, Insert)
     {
         int data;
         auto result = htable.retrieve( e.first, data );
-        std::cout<<htable;
         ASSERT_TRUE( result );
         ASSERT_EQ( e.second, data );
     }
@@ -370,28 +370,28 @@ TEST_F(HTTest, InsertExisting)
     }
 
     // Let us use the insert() to change the data stored in the table.
-    // for( const auto &e : expected )
-    // {
-    //     int data;
-    //     auto result = htable.retrieve( e.first, data );
-    //     ASSERT_TRUE( result );
-    //     result = htable.insert( e.first, e.second );
-    //     ASSERT_FALSE( result ); // False in case the element is already in the table.
-    // }
+    for( const auto &e : expected )
+    {
+        int data;
+        auto result = htable.retrieve( e.first, data );
+        ASSERT_TRUE( result );
+        result = htable.insert( e.first, e.second );
+        ASSERT_FALSE( result ); // False in case the element is already in the table.
+    }
 
-    // // Finally, Make sure that now they have the same elements with the same information.
-    // for( const auto &e : expected )
-    // {
-    //     int data;
-    //     auto result = htable.retrieve( e.first, data );
-    //     ASSERT_TRUE( result );
-    //     ASSERT_EQ( e.second, data );
-    // }
+    // Finally, Make sure that now they have the same elements with the same information.
+    for( const auto &e : expected )
+    {
+        int data;
+        auto result = htable.retrieve( e.first, data );
+        ASSERT_TRUE( result );
+        ASSERT_EQ( e.second, data );
+    }
 }
 
 TEST_F(HTTest, Retrieve)
 {
-    ac::HashTbl<char, int> htable {{"x", 27}, {"y", 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
+    ac::HashTbl<char, int> htable {{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
     std::map<char, int> expected {{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
     std::map<char, int> unexpected {{'s', 27}, {'e', 3}, {'g', 1}, {'q', 21}, {'i', 6}, {'j', 11}};
 
@@ -404,12 +404,12 @@ TEST_F(HTTest, Retrieve)
         ASSERT_EQ( e.second, data );
     }
     // Make sure none of the elements in the unexpected map are found.
-    // for( const auto &e : unexpected )
-    // {
-    //     int data;
-    //     auto result = htable.retrieve( e.first, data );
-    //     ASSERT_FALSE( result );
-    // }
+    for( const auto &e : unexpected )
+    {
+        int data;
+        auto result = htable.retrieve( e.first, data );
+        ASSERT_FALSE( result );
+    }
 }
 
 TEST_F(HTTest, EraseExisting)
@@ -490,7 +490,7 @@ TEST_F(HTTest, Rehash)
     }
     ASSERT_EQ( set1.size(), htable.size() ); // This must've not changed.
 
-    // // Insert more elements to trigger another rehash
+    // Insert more elements to trigger another rehash
     for( const auto &e : set2 )
     {
         auto result = htable.insert( e.first, e.second );
@@ -498,13 +498,13 @@ TEST_F(HTTest, Rehash)
     }
     
     // Check whether the hash now have the same elemens as set1 and set2 combined.
-    // for( const auto &e : set1 )
-    // {
-    //     int data;
-    //     auto result = htable.retrieve( e.first, data );
-    //     ASSERT_TRUE( result );
-    //     ASSERT_EQ( e.second, data );
-    // }
+    for( const auto &e : set1 )
+    {
+        int data;
+        auto result = htable.retrieve( e.first, data );
+        ASSERT_TRUE( result );
+        ASSERT_EQ( e.second, data );
+    }
     for( const auto &e : set2 )
     {
         int data;
@@ -547,7 +547,6 @@ TEST_F(HTTest, Count)
         ASSERT_EQ( set2.size(), htable.count(e.first) );
     for ( const auto &e: set3 )
         ASSERT_EQ( set3.size(), htable.count(e.first) );
-    //std::cout << "The table: \n" << htable << std::endl;
 }
 
 int main(int argc, char** argv)

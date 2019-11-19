@@ -78,7 +78,17 @@ namespace ac {
                 return *this;
             }
             HashTbl& operator=( const std::initializer_list< entry_type > & inl){
-                //DUVIDA
+               clear();
+                delete[]m_data_table;
+                m_Tablesz = std::distance(inl.begin(), inl.end());
+                m_data_table = new std::forward_list< entry_type>[m_Tablesz];
+                auto it = inl.begin();
+                for(size_t i = 0; i < m_Tablesz;i++){
+                        insert(it->m_key, it->m_data);
+                        it++;
+                } 
+
+                return *this;
             }
 
             virtual ~HashTbl(){
@@ -89,13 +99,13 @@ namespace ac {
                 m_count++;
                 if(m_count > m_Tablesz){
                     rehash();
+                    m_count++;
                 }
                 KeyEqual test;
                 int pos = hashToInt(key); 
                  auto it = m_data_table[pos].begin();
                     while(it != m_data_table[pos].end()){
                         if(test(key, it->m_key) == true){
-                            std::cout << "ENTREI";
                             it->m_data = data;
                             return false;
                         }
@@ -165,8 +175,8 @@ namespace ac {
                 return std::distance(it, it2);
             }
 
-            inline size_type size() const { return m_count; }
-            inline size_type tbl_size() const { return m_Tablesz; }
+            inline size_type size() const { return m_count;}
+            inline size_type tbl_size() const { return m_Tablesz;}
 
             DataType& at( const KeyType& key){
                 KeyEqual test;
@@ -270,6 +280,7 @@ namespace ac {
                 delete[]m_data_table;
                 m_data_table = aux.m_data_table;
                 m_Tablesz = new_m_Tablesz;
+                m_count = aux.m_count;
             }
     
                
