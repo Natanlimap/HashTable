@@ -87,7 +87,7 @@ namespace ac {
 
             bool insert( const KeyType & key, const DataType & data){
                 m_count++;
-                if(m_count >= m_Tablesz){
+                if(m_count > m_Tablesz){
                     rehash();
                 }
                 KeyEqual test;
@@ -95,10 +95,11 @@ namespace ac {
                  auto it = m_data_table[pos].begin();
                     while(it != m_data_table[pos].end()){
                         if(test(key, it->m_key) == true){
+                            std::cout << "ENTREI";
                             it->m_data = data;
                             return false;
                         }
-                        it++;
+                        it++;   
                     } 
 
                 m_data_table[pos].push_front(entry_type(key, data));
@@ -116,7 +117,8 @@ namespace ac {
                      }
                      it++;
                 }
-                    return false;                
+                        data = DataType();
+                        return false;                
             }
 
             bool erase( const KeyType & key){
@@ -176,7 +178,7 @@ namespace ac {
                         }
                         it++;
                 }
-                throw std::out_of_range("chave invalida");      //NAO SEI SE FIZ CERTo
+                throw std::out_of_range("chave invalida");      
 
             }
             void print();
@@ -211,15 +213,20 @@ namespace ac {
             {
                 std::cout<<std::endl;   
                 for(size_t i = 0;i < ht_.m_Tablesz ;i++){
+                    std::cout << "[" << i << "]" << std::endl;
                     auto it = ht_.m_data_table[i].begin();
-                         while(it != ht_.m_data_table[i].end()){
-                            os_ << it->m_data << " ";
-                            it++;
+                    if(ht_.m_data_table[i].empty() == true){
+                        std::cout << "EMPTY" <<std::endl;
                     }
 
+                     else{
+                        while(it != ht_.m_data_table[i].end()){
+                            os_ << it->m_data << std::endl;
+                            it++;
+                        }
                     }
-                    std::cout<<std::endl;
-                
+                }
+                    
                 return os_;
             }
 
@@ -252,20 +259,22 @@ namespace ac {
             void rehash(){
                 int new_m_Tablesz = returnPrime(2*m_Tablesz);
                 HashTbl< KeyType, DataType, KeyHash, KeyEqual > aux{new_m_Tablesz};
-                 for(size_t i = 0;i < m_Tablesz - 1;i++){
+                 for(size_t i = 0;i < m_Tablesz;i++){
                     auto it = m_data_table[i].begin();
                          while(it != m_data_table[i].end()){
                             aux.insert(it->m_key, it->m_data);
                             it++;
                     }
                 }
+                this->clear();
+                delete[]m_data_table;
                 m_data_table = aux.m_data_table;
                 m_Tablesz = new_m_Tablesz;
             }
     
                
 
-            //=== Private memnbers
+            //=== Private members
         private:
             size_t m_Tablesz; //Tamanho da tabela
             unsigned int m_count; //!< Numero de elementos na tabel. 

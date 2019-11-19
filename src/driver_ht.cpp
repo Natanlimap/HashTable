@@ -4,7 +4,7 @@
 #include <functional>
 #include <tuple>
 #include <cassert>
-
+#include <map>
 #include "../include/hashtbl.h"
 #include "../include/account.h"
 
@@ -113,6 +113,30 @@ int main()
             assert( conta_teste == e );
         }
     }
+{
+    ac::HashTbl<char, int> htable( 3 );
+    std::map<char, int> expected {{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
+
+    assert( htable.empty() == true);
+
+    // Test insertion
+    for( const auto &e : expected )
+    {
+        auto result = htable.insert( e.first, e.second );
+        assert( result );
+    }
+    std::cout << htable;
+    // Make sure they have the same elements with the same information.
+    for( const auto &e : expected )
+    {
+        int data;
+        auto result = htable.retrieve( e.first, data );
+        std::cout<< "new"<< std::endl <<htable;
+        assert( result );
+        std::cout<< " e.second --> " << e.second << " == " << data << "<--data " << std::endl;
+        assert( e.second == data );
+    }
+}
 
     return EXIT_SUCCESS;
 }

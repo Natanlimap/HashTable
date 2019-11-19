@@ -330,30 +330,30 @@ TEST_F(HTTest, AssignmentInitializer)
     }
 }
 
-// TEST_F(HTTest, Insert)
-// {
-//     ac::HashTbl<std::string, int> htable( 3 );
-//     std::map<std::string, int> expected {{"xaaa", 27}, {"yaaa", 3}, {"waa", 1}, {"aaaa", 21}, {"baaa", 6}, {"caaa", 11}};
+TEST_F(HTTest, Insert)
+{
+    ac::HashTbl<std::string, int> htable( 3 );
+    std::map<std::string, int> expected {{"xaaa", 27}, {"yaaa", 3}, {"waa", 1}, {"aaaa", 21}, {"baaa", 6}, {"caaa", 11}};
 
-//     ASSERT_TRUE( htable.empty() );
+    ASSERT_TRUE( htable.empty() );
 
-//     // Test insertion
-//     for( const auto &e : expected )
-//     {
-//         auto result = htable.insert( e.first, e.second );
-//         ASSERT_TRUE( result );
-//     }
+    // Test insertion
+    for( const auto &e : expected )
+    {
+        auto result = htable.insert( e.first, e.second );
+        ASSERT_TRUE( result );
+    }
 
-//     // // Make sure they have the same elements with the same information.
-//     for( const auto &e : expected )
-//     {
-//         int data;
-//         auto result = htable.retrieve( e.first, data );
-//         std::cout<<htable;
-//         // ASSERT_TRUE( result );
-//         // ASSERT_EQ( e.second, data );
-//     }
-// }
+    // Make sure they have the same elements with the same information.
+    for( const auto &e : expected )
+    {
+        int data;
+        auto result = htable.retrieve( e.first, data );
+        std::cout<<htable;
+        ASSERT_TRUE( result );
+        ASSERT_EQ( e.second, data );
+    }
+}
 
 TEST_F(HTTest, InsertExisting)
 {
@@ -389,28 +389,28 @@ TEST_F(HTTest, InsertExisting)
     // }
 }
 
-// TEST_F(HTTest, Retrieve)
-// {
-//     ac::HashTbl<char, int> htable {{"x", 27}, {"y", 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
-//     std::map<char, int> expected {{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
-//     std::map<char, int> unexpected {{'s', 27}, {'e', 3}, {'g', 1}, {'q', 21}, {'i', 6}, {'j', 11}};
+TEST_F(HTTest, Retrieve)
+{
+    ac::HashTbl<char, int> htable {{"x", 27}, {"y", 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
+    std::map<char, int> expected {{'x', 27}, {'y', 3}, {'w', 1}, {'a', 21}, {'b', 6}, {'c', 11}};
+    std::map<char, int> unexpected {{'s', 27}, {'e', 3}, {'g', 1}, {'q', 21}, {'i', 6}, {'j', 11}};
 
-//     // Make sure they have the same elements with the same information.
-//     for( const auto &e : expected )
-//     {
-//         int data;
-//         auto result = htable.retrieve( e.first, data );
-//         ASSERT_TRUE( result );
-//         ASSERT_EQ( e.second, data );
-//     }
-//     // Make sure none of the elements in the unexpected map are found.
-//     for( const auto &e : unexpected )
-//     {
-//         int data;
-//         auto result = htable.retrieve( e.first, data );
-//         ASSERT_FALSE( result );
-//     }
-// }
+    // Make sure they have the same elements with the same information.
+    for( const auto &e : expected )
+    {
+        int data;
+        auto result = htable.retrieve( e.first, data );
+        ASSERT_TRUE( result );
+        ASSERT_EQ( e.second, data );
+    }
+    // Make sure none of the elements in the unexpected map are found.
+    // for( const auto &e : unexpected )
+    // {
+    //     int data;
+    //     auto result = htable.retrieve( e.first, data );
+    //     ASSERT_FALSE( result );
+    // }
+}
 
 TEST_F(HTTest, EraseExisting)
 {
